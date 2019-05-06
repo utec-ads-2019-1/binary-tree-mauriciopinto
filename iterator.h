@@ -28,16 +28,24 @@ class Iterator {
         }
 
         Iterator<T> operator=(Iterator<T> other) {          
-            this = other;
-            return other;
+            current = other.current;
+            return this;
         }
 
         bool operator!=(Iterator<T> other) {
-            return true;
+            return current != other.current;
         }
 
         Iterator<T> operator++() {
-            traversed->push();
+            traversed->push(remaining->top());
+            remaining->pop();
+            if (!current->right){
+                current = remaining->top();
+            }
+            else{
+                while()
+            }
+            return this;
         }
 
         Iterator<T> operator--() {
