@@ -18,7 +18,7 @@ void Tester::testBSFTree(Mocker mocker, vector<T> elements) {
         ASSERT(test->find(elements[j]), "There is a problem with the insert or find");
     }
 
-    sortAndPrune(elements);
+    /*sortAndPrune(elements);
 
     ASSERT(elements.size() == test->size(), "There is a problem with the insert or size");
 
@@ -42,7 +42,7 @@ void Tester::testBSFTree(Mocker mocker, vector<T> elements) {
     for (int j = elements.size() - 1; j >= 0; --j) {
         --it;
         ASSERT(elements.at(j) == *it, "There is a problem with the iterator (--)");
-    }
+    }*/
 }
 
 template <typename T>

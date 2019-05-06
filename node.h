@@ -13,6 +13,8 @@ class Node {
         T data;
         Node<T> *left;
         Node<T> *right;
+public:
+    Node<T>(T data) : left(nullptr), right(nullptr), data(data){};
 
     template<class>
     friend class BSTree; 
