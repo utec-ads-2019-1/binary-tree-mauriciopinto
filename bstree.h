@@ -10,7 +10,7 @@ class BSTree {
         unsigned int nodes = 0;
 
     public:
-        BSTree() : root(nullptr) {};
+        BSTree() : root(nullptr), nodes(0) {};
         bool find(T data) {
             Node<T>* current = this->root;
             while(current != nullptr){
@@ -34,6 +34,7 @@ class BSTree {
 
                 if (!root) {
                     root = newNode;
+                    nodes++;
                     return true;
                 }
 
@@ -64,79 +65,121 @@ class BSTree {
         }
 
         bool remove(T data) {
-            T temp;
             if(!root){
-                throw out_of_range("No elements to remove")
+                throw out_of_range("No elements to remove");
             }
-            Node<T>* current = this->root;
-            while(current->data != data) {
-                if (data == current->data) {
+            if(find(data)) {
+                Node<T> *temp1 = root;
+                Node<T> *temp2 = root;
+                while(temp2->data != data){
+                        if (data > temp1->data) {
+                            temp1 = temp1->right;
+                        }
+                        else {
+                            temp1 = temp1->left;
+                        }
+                        if (data > temp1->data) {
+                            temp2 = temp1->right;
+                        }
+                        else {
+                            temp2 = temp1->left;
+                        }
+                    }
+                if (temp2->right == nullptr && temp2->left == nullptr) {
+                    delete temp2;
+                    nodes--;
                     return true;
-                } else {
-                    if (data > current->data) {
-                        current = current->right;
-                    } else {
-                        current = current->left;
+                }
+                else if (temp2->right != nullptr && temp2->left == nullptr) {
+                    if(temp2 == temp1->right){
+                        temp1->right = temp2->right;
+                        delete temp2;
+                        nodes--;
+                        return true;
+                    }
+                    else if(temp2 == temp1->left){
+                        temp1->left = temp2->left;
+                        delete temp2;
+                        nodes--;
+                        return true;
                     }
                 }
-            }
-            if(!current->right && !current->left){
-                delete current;
-            }
-            else if(current->right && !current->left){
-                while(current->right != nullptr) {
-                    temp = current->data;
-                    current->data = current->right->data;
-                    current->right->data = temp;
-                    current = current->right;
+                else if (temp2->right ==nullptr && temp2->left != nullptr) {
+                    if (temp2 == temp1->right) {
+                        temp1->right = temp2->right;
+                        delete temp2;
+                        nodes--;
+                        return true;
+                    } else if (temp2 == temp1->left) {
+                        temp1->left = temp2->left;
+                        delete temp2;
+                        nodes--;
+                        return true;
+                    }
                 }
-                delete current;
-            }
-            else if(!current->right && current->left){
-                while(current->left != nullptr) {
-                    temp = current->data;
-                    current->data = current->left->data;
-                    current->left->data = temp;
-                    current = current->left;
-                }
-                delete current;
-            }
-            else if(current->right && current->left){
-                while(current->right != nullptr && current->left != nullptr) {
-                    temp = current->data;
-                    current->data = current->right->data;
-                    current->right->data = temp;
-                    current = current->right;
-                }
-                if(){
-
+                else if (temp2->right != nullptr && temp2->left != nullptr) {
+                    T datatemp;
+                    temp1 = temp2;
+                    temp2 = temp2->right;
+                    while(temp2->left != nullptr){
+                        temp2 = temp2->left;
+                    }
+                    datatemp = temp1->data;
+                    temp1->data = temp2->data;
+                    temp2->data = datatemp;
+                    remove(temp2->data);
                 }
             }
-            return true;
+            else{
+                return false;
+            }
+            return false;
         }
 
         unsigned int size() {
             return nodes;
         }
 
-        void traversePreOrder() {
-            // TODO
+        void traversePreOrder(Node<T>* node1) {
+            while(node1 != nullptr){
+            cout << node1->data << " ";
+            traversePreOrder(node1->left);
+            traversePreOrder(node1->right);
+            }
+            return;
         }
 
         void traverseInOrder() {
-            // TODO
+            Iterator<T> it = this->begin();
+            while(it != this->end()){
+                cout << it.operator*() << " ";
+                it.operator++();
+            }
         }
 
-        void traversePostOrder() {
-            // TODO
+        void traversePostOrder(Node<T>* node1) {
+            while(node1 != nullptr){
+                traversePostOrder(node1->left);
+                traversePostOrder(node1->right);
+                cout << node1->data << " ";
+            }
         }
 
         Iterator<T> begin() {
-            return Iterator<T>(root);
+            Node<T>* current = root;
+            while(current->left != nullptr){
+                current = current->left;
+            }
+            return Iterator<T>(current);
         }
 
         Iterator<T> end() {
-            return Iterator<T>(root);
+            Node<T>* current = root;
+            while(current->right != nullptr){
+                current = current->right;
+            }
+            current = current->right;
+            return Iterator<T>(current);
         }
 
         ~BSTree() {

@@ -10,24 +10,20 @@ template <typename T>
 class Iterator {
     private:
         Node<T> *current;
-        stack<T>* remaining;
-        stack<T>* traversed;
+        stack<Node<T>*> remaining;
+        stack<Node<T>*> traversed;
     public:
-        Iterator() {
-            // TODO
-        }
+        Iterator():current(nullptr){}
 
         Iterator(Node<T> *node) {
-            remaining = new stack<T>;
-            traversed = new stack<T>;
             current = node;
             while(current->left){
-                remaining->push(current);
+                remaining.push(current);
                 current = current->left;
             }
         }
 
-        Iterator<T> operator=(Iterator<T> other) {          
+        Iterator<T>& operator=(Iterator<T> other) {
             current = other.current;
             return this;
         }
@@ -37,19 +33,27 @@ class Iterator {
         }
 
         Iterator<T> operator++() {
-            traversed->push(remaining->top());
-            remaining->pop();
+            traversed.push(remaining.top());
+            remaining.pop();
             if (!current->right){
-                current = remaining->top();
+                current = remaining.top();
             }
             else{
-                while()
+                current = current->right;
+                remaining.push(current);
+                while(current->left != nullptr){
+                    current = current->left;
+                    remaining.push(current);
+                }
             }
-            return this;
+            return *this;
         }
 
         Iterator<T> operator--() {
-            return Iterator<T>(this->current);
+            remaining.push(traversed.top());
+            traversed.pop();
+            current = remaining.top();
+            return *this;
         }
         T operator*() {
             return current->data;
