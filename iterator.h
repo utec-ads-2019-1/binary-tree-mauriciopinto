@@ -33,6 +33,7 @@ class Iterator {
         }
 
         Iterator<T> operator++() {
+            // Aquí la lógica está un poco mal al comienzo, va a dar violación de segmento
             traversed.push(remaining.top());
             remaining.pop();
             if (!current->right){
@@ -50,12 +51,14 @@ class Iterator {
         }
 
         Iterator<T> operator--() {
+            // No es tan simple, hay que tener un flag
             remaining.push(traversed.top());
             traversed.pop();
             current = remaining.top();
             return *this;
         }
         T operator*() {
+            // Falta controlar el caso vacío
             return current->data;
         }
 };

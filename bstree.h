@@ -65,6 +65,8 @@ class BSTree {
         }
 
         bool remove(T data) {
+            // En vez de excepción, deberías retornar false
+            // Da error
             if(!root){
                 throw out_of_range("No elements to remove");
             }
@@ -166,6 +168,7 @@ class BSTree {
         }
 
         Iterator<T> begin() {
+            // Esto debería hacerse desde el iterador, o al menos desde una función static
             Node<T>* current = root;
             while(current->left != nullptr){
                 current = current->left;
@@ -174,6 +177,7 @@ class BSTree {
         }
 
         Iterator<T> end() {
+            // Esto debería hacerse desde el iterador, o al menos desde una función static
             Node<T>* current = root;
             while(current->right != nullptr){
                 current = current->right;
@@ -183,6 +187,7 @@ class BSTree {
         }
 
         ~BSTree() {
+            // Falta destructor
             // TODO
         }
 };
